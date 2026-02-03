@@ -28,13 +28,18 @@ umd_fees_pct <- umd_fees |> mutate(pct_change = (`Fall 2024`- `Fall 2021`)/`Fall
 ```
 
 
+```{r}
+umd_fees_pct_25 <- umd_fees |> mutate(pct_change = (`Fall 2025`- `Fall 2024`)/`Fall 2024` * 100)
+```
+
+
 
 ### Task 4: Describe our results
 
 Write a few sentences about what you found in the data. What's the story here?
 
 
-
+Overall, UMD fees have increased between 2021 and 2025. But not evenly. Some fees, like the Athletic Fee, remained consistent. Others, like the Shuttle Bus fee, increased significantly. Additionally, there was no fee for the Counseling Center in 2021, so we can only compare increases for that fee from 2022 onward. 
 
 
 When you are done, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.

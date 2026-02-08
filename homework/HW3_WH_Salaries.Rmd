@@ -9,6 +9,7 @@ In this assignment, we will be working with a dataset containing information abo
 You will need to load the tidyverse library
 
 ```{r}
+library(tidyverse)
 ```
 
 Then you'll load the data from the web. The URL for the data is: https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/white_house_salaries_2025.csv. You will create a dataframe called `wh_salaries` that contains the data from this URL.
@@ -16,18 +17,23 @@ Then you'll load the data from the web. The URL for the data is: https://raw.git
 ### Task 2: Load the Data and Describe It
 
 ```{r}
+wh_salaries <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/white_house_salaries_2025.csv")
 ```
 ### Task 3: Describe the Data
 
 You should examine that dataframe carefully by clicking on it in the Environment tab in RStudio. Write a couple of sentences describing the categories of incidents. From a reporting standpoint, what stands out to you about this data? Are there any salary values that will cause problems for analysis?
 
-ANSWER HERE
+The data contains the salaries for 404 White House employees taken in 2025. The employees are listed in alphabetical order by last name, with each row being one employee and the other four columns being different values for each. In addition to their name, the data includes their total salary, their pay basis (all are paid per annum), their title, and their employee status. Every individual listed in the data is classified either as "employee" or as "detailee." The employee status stands out to me, and would likely require explanation in any story that uses this data. Analysis of the employees' salaries may also need to be separated by "employee" or "detailee" depending on what specific analysis we are conducting. Eight of the employees listed in this data receive no salary. The next highest salary is 59070, meaning these outliers will likely skew the results when taking an average. 
 
 ### Task 4: Calculate the Mean and Median of the Salaries
 
 Write code to calculate the mean and median of the salaries in the dataset using the `summarize()` function. You don't need to make a new dataframe, just display the results.
 
 ```{r}
+wh_salaries |> summarize(
+  mean_salary = mean(SALARY),
+  median_salary = median(SALARY)
+)
 
 ```
 
@@ -36,17 +42,24 @@ Write code to calculate the mean and median of the salaries in the dataset using
 Take the code you just wrote and add in the minimum and maximum salaries (the functions for that are `min()` and `max()`). Your results should show four columns: mean_salary, median_salary, min_salary, max_salary.
 
 ```{r}
-
+wh_salaries |> summarize(
+  mean_salary = mean(SALARY),
+  median_salary = median(SALARY),
+  min_salary = min(SALARY),
+  max_salary = max(SALARY)
+)
 ```
 
 ### Task 6: Describe the Results
 
 Write a couple of sentences describing the results of your analysis. What do the mean and median salaries tell you about the data? What do the minimum and maximum salaries tell you? Are there any outliers in the data?
 
-ANSWER HERE
+The data shows that most White House staffers make more than 100,000 dollars per year. The median salary is 101,500 dollars per year, while the mean is slightly higher at around 109,117 dollars per year. This tells us that there are some high-earning employees at the top of the list skewing the mean salary to be slightly higher than the mean. Additionally, the salaries range from 0 to 225,700 dollars per year. There are eight employees who don't receive a salary that are significant outliers compared to the rest of the data. This shows that some White House employees seem to have elected not to receive a paycheck. And while the maximum salary is 225,700, only one other employee has a salary higher than 195,200. 33 employees are payed 195,200. 
 
 ### Task 7: Story Idea
 
 Based on the data, what is your best story idea? What is the next step you would take to develop that story idea?
 
-ANSWER HERE
+I think it would be interesting to look in to the difference in salaries between detailee and standard federal employees. For example, the maximum salary for federal employees was 195,200 per year when this data was collected from. But two detailees, Jacalynne Klopp and Edgar Mkrtchian, made more than the limit. To develop this idea, I'd compare the average salary between the two groups, and see if it isn't just a difference of maximum salary, but of average salary as well. After that, I would try to see if there is data for other federal agencies that I could pull from to compare how the White House salaries stack up to the rest of the federal government. I'd also try to ask people from OPM or the White House what the key distinction between these two worker groups are, and why one receives higher payment. If they don't reply, it would be worth seeking out good governance groups or other advocates who are familiar with the federal employment system. 
+
+A separate story you could write would be on the White House staffers who take 0 salary. It seems that most of those not getting paid are high-level administration officials, such as Marco Rubio or Steve Witkoff. It could be interesting to see why they aren't taking payment, and whether previous administrations have also had high-level officials not take any payment. 

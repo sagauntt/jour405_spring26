@@ -46,7 +46,7 @@ crimes_with_rates <- crimes |> mutate(violent_rate = violent_crime_total/populat
 Write a few sentences about what you found in the data. What years had the highest crime rates? What years had the lowest crime rates? Does the pattern match your expectations?
 
 
-
+Overall, the crime rate in Maryland has dropped significantly since the 1970s. The violence crime rate steadily increased from the 70s until it reached its peak in the 1990s. The year with the highest violent crime rate was 1992 with a rate of 99.92 violent crimes per 10,000 residents. Property crimes, however, peaked in the early 1980s. 1980 had the highest property crime rate, at about 577.5 property crimes per 10,000 residents. 2020 was the lowest year for both violent and property crimes, with about 41.22 and 162.62 per 10,000 residents, respectively. This pattern makes sense, as nationally the crime rate has been steadily dropping since the 1990s. 
 
 When you are done, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.
 

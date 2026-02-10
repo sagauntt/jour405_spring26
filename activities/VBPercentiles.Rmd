@@ -37,7 +37,7 @@ team_aces |> mutate(percentile = ntile(total_aces, 100))
 
 Write a couple of sentences that puts Maryland into context with the other teams in the dataset. You can do some Internet research to help with this.
 
-Maryland's volleyball team ranked 17th in the nation in amount of aces, at 223. That put them in the 95th percentile for aces compared to every other team included in this data. This means that 95% of the other teams has the same amount or fewer aces. Alternatively, they were Top 5%. The highest ranked team is UTEP, which had 263 aces. Comparatively, the lowest team was Alcorn State with 77 aces. This put these two teams in the 100th and 1st percentiles, respectively. 
+Maryland's volleyball team ranked 17th in the nation in amount of aces, at 223. That put them in the 95th percentile for aces compared to every other team included in this data. This means that 95% of the other teams has the same amount or fewer aces. Alternatively, they were Top 5%. The highest ranked team is UTEP, which had 263 aces. Comparatively, the lowest team was Alcorn State with 77 aces. This put these two teams in the 100th and 1st percentiles, respectively. During the 2024 season, for which this data was collected, Maryland finished 14-17, with a 5-15 conference record. The aces weren't enough to save the season. 
 
 When you are done, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.
 

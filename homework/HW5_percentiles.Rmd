@@ -57,6 +57,27 @@ Edsmonton, a Prince's George's County community of about 1,500 people, saw its v
 
 The Washington, D.C. suburb's violent crime rate increase was the largest of any city in Maryland over the past year. But it wasn't alone. Several other local suburbs, including Poolesville, Kensington and Glenarden, all saw their violent crime rates more than double. While these communities may have seen the highest percentage increases, their total crime numbers, however, were still far smaller than other suburbs, with each seeing less than 10 reported violent crimes in 2020. 
 
+
 ### Task 9: Save Your Work and Put it on GitHub
 
 Save this notebook, then commit it to your local repository. Push the changes to your GitHub repository and submit the URL for this file in ELMS.
+
+### Task 10: 
+
+Take the HW4_MD_CityCrime.Rmd notebook you worked on and add a section at the bottom called Task 10. Your task will be to take the violent crime rates for 2020 and do three things:
+
+Using the 2020 violent crime rate, calculate the percentiles using `ntile()`. Save the results to a new dataframe called `md_cities_percentiles`. 
+How many cities are above the 90th percentile?
+Calculate the Interquartile Range of the 2020 violent crime rate using `summarize()` and R's `IQR()` function. The syntax is similar to how `mean()` works.
+Do the results change your best story idea from the previous assignment? Why or why not?
+
+ANSWER: 
+
+
+```{r}
+md_cities_percentiles <- md_cities_change |> mutate(violent_rate_percentiles_2020 = ntile(violent_rate_2020, 100)) 
+
+md_cities_percentiles |> summarize(violent_rate_IQR = IQR(violent_rate_2020, na.rm = TRUE))
+  
+```
+

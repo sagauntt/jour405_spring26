@@ -71,13 +71,14 @@ How many cities are above the 90th percentile?
 Calculate the Interquartile Range of the 2020 violent crime rate using `summarize()` and R's `IQR()` function. The syntax is similar to how `mean()` works.
 Do the results change your best story idea from the previous assignment? Why or why not?
 
-ANSWER: 
+ANSWER: There are 10 cities above the 90th percentile. The Interquartile range is 41.98895. The results do change my best story idea. Ocean City is listed at the 100th percentile for violent crime rate. And it had an 82 percent violent crime rate increase. I think it'd be interesting to look into how Ocean City compares to the rest of the state, and what is causing its dramatic crime rate. 
 
 
 ```{r}
 md_cities_percentiles <- md_cities_change |> mutate(violent_rate_percentiles_2020 = ntile(violent_rate_2020, 100)) 
 
-md_cities_percentiles |> summarize(violent_rate_IQR = IQR(violent_rate_2020, na.rm = TRUE))
+md_cities_percentiles |> summarize(
+  violent_rate_IQR = IQR(violent_rate_2020, na.rm = TRUE))
   
 ```
 

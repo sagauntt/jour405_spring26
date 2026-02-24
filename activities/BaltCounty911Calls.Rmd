@@ -74,7 +74,7 @@ summary(daily_calls$call_count)
 
 Let's visualize the time series of daily calls. What patterns do you see? If you had to draw horizontal lines that would highlight unusual days, where would those lines be?
 
-ANSWER HERE
+ANSWER HERE: Overall, the amount of overdose calls per day remain relatively consistent throughout the year. However, there does seem to be a slightly higher number of calls in the warmer months. Spring and fall remain high, but there does seem to be a slight dip during peak winter months. If I were to draw a horizontal line highlighting the unusual days, I'd include the peak days in early October and the spike the seems to be over Christmas/New Year's Day. There are also a few spikes during July. For days with low overdose calls, I'd include the drops that occur around June and February. 
 
 ```{r daily-calls-plot}
 # Plot daily call volume
@@ -137,7 +137,7 @@ unusual_days |>
 
 Let's visualize these unusual days in the context of the full dataset. How do they differ from your answer on Task 3?
 
-ANSWER HERE
+ANSWER HERE: The unusual days I listed in task 3 also appear on this chart, but there are also several additional days listed. There are more peaks in the spring that I didn't include in my answer. There are also a few lows in the fall that I did not list. In general, there are more unusually high days than low. 
 
 ```{r plot-unusual-days}
 # Create a clean factor for the plot legend
@@ -207,7 +207,7 @@ ggplot(dow_summary, aes(x = day_of_week, y = avg_calls)) +
 
 We can also calculate z-scores that account for the day of the week pattern. How would you describe the day with the highest z-score without using the term "z-score"?
 
-ANSWER HERE
+ANSWER HERE: Oct. 4, 2022, a Tuesday, had the highest number of overdose calls at 23. With the county seeing an average of about 10.35 overdose calls each Tuesday, it had the largest difference from the average of any day in 2022 on record. 
 
 ```{r day-of-week-z-scores}
 # Calculate day-of-week adjusted z-scores
@@ -298,5 +298,4 @@ top_outliers |> kable(digits = 2)
 
 Based on our z-score analysis, what are some potential angles for reporting? What would your next steps be and what would you tell an editor about your findings?
 
-ANSWER HERE
-
+I think it'd be interesting to look into the seasonal differences in the number of overdose calls. I'd break it down to an average by month, and see where the record lows typically fall during the year. I would also look at what typically causes a low number of overdoses: Holidays? Weather/season? Something else? I would tell my editor that there seems to be a drop in overdose calls after January, and then it ticks back up in the spring. 

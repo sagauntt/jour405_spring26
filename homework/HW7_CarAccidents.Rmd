@@ -75,7 +75,7 @@ ggplot(accidents, aes(x = date, y = total)) +
 ### Task 1 (3 points)
 Looking at the time series visualization above, identify at least two noticeable patterns or anomalies. What questions would you want to investigate further based on this initial view of the data? How might these visual patterns translate into potential story angles?
 
-ANSWER HERE
+The first anomaly I noticed is obviously the decrease in 2020. People were stuck at home during the height of the COVID-19 Pandemic, and thus there were less cars on the road. The other trend I notice is that crashes seem to be generally decreasing since a peak in 2021. I'd want to further investigate what led to the 2021 peak, and whether there have been changes since then to cause the overall decrease. It could be an interesting story to look into what the county is doing to decrease the number of crashes. 
 
 The daily data is quite noisy, so let's also look at weekly patterns:
 
@@ -114,7 +114,7 @@ ggplot(accidents, aes(x = day_of_week, y = total)) +
 ### Task 2 (2 points)
 Based on the day-of-week analysis, which day(s) have the highest and lowest average accidents? Why might these patterns exist?
 
-ANSWER HERE
+Monday, Tuesday and Wednesday are all about tied for least crashes each week. Friday has the highest average number of crashes, with Saturday trailing just behind. This could be for multiple reasons. During the week, people are likely going to be driving to and from work, school or other routine places. But on the weekend, people might be venturing farther away as they likely have a free day. Additionally, it could be from more people drinking or going out Friday night/Saturday, leading to more accidents. 
 
 ## Calculating Z-Scores
 
@@ -161,7 +161,7 @@ unusual_days |>
 ### Task 3 (3 points)
 Choose one of the top 10 unusual days and research what might have happened on that date. Look for weather events, holidays, major incidents, or other factors that could explain the unusual number of accidents. Briefly describe your findings and how you would incorporate this context into a story.
 
-ANSWER HERE
+Oct. 29, 2021, had multiple factors likely influencing its extremely high number of crashes. First, it was a Friday. This is in general is the day of the week with the highest number of crashes. Second, it was the Friday before Halloween. There were likely far more people out on the street late at night and intoxicated. Though COVID restrictions were still in place, there were still likely many people who wanted to celebrate the holiday after a year and a half of lockdowns. Lastly, there was heavy rain that night, making the road conditions dangerous. This context shows why the day had such an extraordinary number of crashes. 
 
 Let's visualize these unusual days:
 
@@ -210,7 +210,7 @@ unusual_dow |>
 ### Task 4 (3 points)
 Compare the days that have extreme z-scores overall versus those with extreme day-of-week z-scores. How do these lists differ? What journalistic insights can you draw from comparing these two different approaches to measuring "unusual" days?
 
-ANSWER HERE
+The previously list contained almost exclusively Fridays and Saturdays. This list is more spread out across the week, containing Wednesdays, Tuesdays, Sundays, etc. I would be more likely to pull my analysis from this list, as it accounts for the flux in weekly driving patterns. Though some of the numbers might be smaller in terms of totals, they represent days with the highest differences, which I believe is more interesting to use.
 
 Let's see how many unusual days we have for each day of the week:
 
@@ -289,7 +289,7 @@ unusual_monthly |>
 ### Task 5 (2 points)
 Based on the monthly pattern analysis, which months have the highest and lowest average accidents? Develop a hypothesis about why these seasonal patterns exist.
 
-ANSWER HERE
+January has the lowest number of average accidents. October has the highest. While conditions are likely poor in January, this might actually lead to more people staying home, and thus less drivers on the road. Many schools don't go back to session until mid-January or so, and some people choose to work from home over the holidays and new year. October may see more crashes as it is when the seasons begin to change. Colder weather and worsening road conditions, plus there aren't any stretches where school will be out or people won't be at work. There also could be a spike around Halloween. 
 
 ## Identifying Extreme Outliers
 
@@ -314,9 +314,22 @@ if(nrow(extreme_outliers) > 0) {
 ### Task 6 (2 points)
 For the extreme outliers identified (z-scores beyond ±3), what do they have in common?
 
-ANSWER HERE
+Most are Fridays or Saturdays. Many are in 2021. Additionally, there are far more days with a higher-than-average number of crashes than lower. 
 
 ## Your Best Story Pitch
 
 ### Task 7 (5 points)
 Based on all the analyses performed, craft your best story pitch, including a headline and lede. Be sure to include what kinds of sources/people you'd talk to for the story.
+
+Pitch: Car crashes have decreased steadily since around 2021. Why? What changes in the county have contributed? Is this an anomaly in the state or country, or mirroring national trends? 
+
+HL: Car accidents Prince George's County fall to lowest amount in nearly 5 years
+
+After reaching a peak in late 2021, the average number of car accidents in Prince George's County has steadily fallen. Now, the county is approaching its lowest number of crashes in five years. 
+
+Sources: 
+County data to show how rate of crashes has changed
+PGPD
+County Exec/Council, to look into whether the county has made any changes to increase road safety
+National road safety organizations, like the NRSF or AAA Foundation for Traffic Safety, for national context
+Insurers? Have their been less claims? 

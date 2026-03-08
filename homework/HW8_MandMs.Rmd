@@ -6,26 +6,60 @@ In this assignment, you'll be picking up where you left off with the M&Ms activi
 
 ### Task 1: Load the tidyverse
 
+```{r}
+library(tidyverse) 
+```
+
+
 
 ### Task 2: Load the M&Ms dataset from https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/mandms.csv
+
+```{r}
+mms <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/mandms.csv") 
+```
 
 
 ### Task 3: Sample 5 rows of data from the dataset
 
+```{r}
+mms_sample <- mms |> 
+  slice_sample(n=5)
+
+```
+
+
 
 ### Task 4: Calculate the mean age and standard deviation of the sample, using either the blue or white number of M&Ms
+```{r}
+mms_sample |> summarize(
+  mean_black = mean(black),
+  dev_black = sd(black)
+)
+
+```
+
 
 
 ### Task 5: Calculate the mean age and standard deviation of the population, using the same measure as in Task 4
+```{r}
+mms |> summarize(
+  mean_black = mean(black),
+  dev_black = sd(black)
+)
+
+```
 
 
 ### Task 6: Compare the sample and population statistics
 
 Compare the two sets of means and standard deviations. Are they similar?
 
+They are similar, but not exact. The sample has a mean black count of 79, while the population has a mean black count of 73.28. Similarly, the sample has a standard deviation of black M&Ms of 15.4, while the population has a standard deviation of 15.7
+
 ### Task 7: Describe the results
 
 Write a few sentences about what you found in the data. What does this tell you about the M&Ms dataset and about the act of random sampling?
 
+The sample had a different mean and standard deviation than the whole population. Though they were similar, using a sample of just 5 created variation in the answers. This shows that if you are going to use a sample to determine traits of the whole population, you must be sure to use a large enough sample and run multiple analyses. 
 
 When finished, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.

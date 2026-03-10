@@ -1,7 +1,7 @@
 ---
 title: "JOUR405: Statistics for Journalists"
 subtitle: "Midterm Exam"
-name: "YOUR NAME HERE"
+name: "SAM GAUNTT"
 ---
 
 ```{r setup, include=FALSE}
@@ -93,7 +93,7 @@ wmata_zscores <- wmata_daily |> mutate(rail_zscore=(rail - mean(rail)) / sd(rail
 
 ### Task 8: Filter `wmata_zscores` to show only days where the absolute value of `rail_zscore` is greater than 2 (unusually high or low rail ridership). Arrange by the absolute value of the z-score, with the most extreme first. How many unusual days are there? (8 points). 
 
-ANSWER: There are 6 days with an asbolute rail zscore of more than 2. All are negative. The most extreme was -2.86 on Christmas Day, 2024. 
+ANSWER: There are 6 days with an absolute rail zscore of more than 2. All are negative. The most extreme was -2.86 on Christmas Day, 2024. 
 
 ```{r}
 wmata_zscores |> filter(abs(rail_zscore) > 2) |> arrange(rail_zscore)

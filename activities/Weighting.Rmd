@@ -233,6 +233,12 @@ kable(comparison, digits = 1, caption = "Difference Between Weighted and Unweigh
 
 1. Which voter category shows the biggest difference between weighted and unweighted results?
 
+The rarely/nevers
+
 2. How might these differences affect reporting on likely voter turnout?
 
+Likely voters will respond more often to surveys, so there will be a better understanding of their expected turnout. But if there is a force that drives rarely/never voters to the polls, such as during Donald Trump's elections, that will be less understood or expected. It could lead to errors in voter turnout forecasts or polls. 
+
 3. Why do you think these differences exist? What does this tell us about who might be over or under-represented in the sample?
+
+Rarely/never voters are harder to understand. They're less likely to vote and at the same time they're less likely to respond to surveys or harder to get a hold of. This means their perspective could be under-represented in the sample as they're simpler harder to poll. 

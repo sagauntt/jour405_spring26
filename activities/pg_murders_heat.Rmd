@@ -50,6 +50,6 @@ pg_murders_heat |>
 
 ### Task 6: Describe the results of both the correlation calculation and the scatterplot.
 
-Heat does have a relationship with murders. There tend to be more murders in the late spring and summer, while murders decrease during the winter. The scatterplot shows that the hotter months fall on the upper right portion of the graph, meaning murders tend to increase with rising temperatures.
+Heat does seem have somewhat of a relationship with murders. There tend to be more murders in the late spring and summer, while murders decrease during the winter. The scatterplot shows that the hotter months fall on the upper right portion of the graph, meaning murders tend to increase with rising temperatures. But not all months follow this trend. August is in the lower portion of the graph, even though it is also a hot month. So there may be more to the data. 
 
 When you are done, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.

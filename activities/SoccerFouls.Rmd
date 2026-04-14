@@ -51,4 +51,21 @@ matches |>
 
 There is a very loose correlation between fouls and foal differential. The trend line is very very flat. The scatterplot is very dispersed. 
 
+
+
+### Task 7: 
+
+
+
+```{r}
+matches |> summarize(correlation = cor(corners, goal_diff, method="pearson")) 
+
+matches |> 
+  ggplot() +
+  geom_point(aes(x=goal_diff, y=corners)) +
+  geom_smooth(aes(x=goal_diff, y=corners), method="lm")
+```
+
+ANSWER: There is a positive correlation between the number of corner kicks and the goal differential, though its not the end-all-be-all. 
+
 When you are done, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.

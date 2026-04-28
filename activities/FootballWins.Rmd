@@ -9,7 +9,7 @@ Multiple regression analysis is a statistical method used to understand the rela
 
 ```{r setup}
 library(tidyverse)
-#install.packages('corrplot')
+install.packages('corrplot')
 library(corrplot)
 ```
 
@@ -26,7 +26,7 @@ teams <- read_csv("https://raw.githubusercontent.com/dwillis/jour405_files/main/
 Next, we construct a linear model to analyze how different factors like `Yards Gained`, `Takeaways`, and `Points Scored` influence the number of wins. This model helps us quantify the relationships and assess which factors are significant predictors of success.
 
 ```{r}
-model <- lm(Wins ~ `Yards Gained` + Takeaways + `Points Scored`, data = teams)
+model <- lm(Wins ~ + Giveaways + Takeaways + `Points Scored`, data = teams)
 summary(model)
 ```
 
@@ -54,7 +54,7 @@ The coefficients tell us the estimated effect of each independent variable on th
 
 Is this a useful model, based on what you've seen? Why?
 
-ANSWER HERE
+The model is definitely more useful than not, but it does have a pretty significant amount of variance. 2 wins in an NFL season is a pretty big deviation, given the short season length. As such, you do have to take the results with a grain of salt. Be skeptical of its answers.
 
 ## Correlation Analysis
 
@@ -80,8 +80,10 @@ The results from our correlation analysis show the strength of the relationships
 
 Which of these three factors - Yards Gained, Takeaways and Points Scored - have the most impact on wins? Are there any that do not seem impactful at all?
 
-ANSWER HERE
+Points scored definitely seems to be the most important, but takeaways and giveaways also have an impact. My model was Wins ~ + Giveaways + Takeaways + `Points Scored`, which had an RSE of 1.532, which means the results vary by about 1.5 wins. It had an adjusted R-squared of 0.772, which means about 77% of the variability in wins is explained by the model. These are both pretty decent numbers, though they're not perfect. Yards gained, from our analysis of the earlier iteration of the model, did not seem to be very impactful to the model's results. 
 
 ## Using the Model (3 points)
 
 Without using the words "multiple regression model", describe how you could use this model to cover a team or game.
+
+Using this model, you could describe it to viewers/fans/readers as measuring the team's net amount of giveaways/takeaways and its number of points scored are the stats to watch for them to succeed. 

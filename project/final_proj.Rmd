@@ -12,6 +12,27 @@ Try executing this chunk by clicking the *Run* button within the chunk or by pla
 library(tidyverse)
 library(janitor)
 ```
+***PROJECT OVERVIEW***
+In this project, I want to analyze monthly voter registration numbers for Maryland residents to determine if there have been any trends or changes in registration patterns over the past three years, but especially since Donald Trump returned to office in 2025. The data spans from January 2023 to April 2026, the latest month for which the elections board lists data.
+
+***LOADING DATA***
+
+I pulled this data from the Maryland Board of Elections website: https://elections.maryland.gov/voter_registration/stats.html 
+
+Process: I downloaded the monthly report pdf for each month from January 2023 to April 2026. I then uploaded these PDFs into an LLM in batches (I used Google Gemini and cross referenced the results with ChatGPT). I directed the model to pull the totals for each party, as that's what I'm really after. 
+
+```{r}
+md_voters_registration <- read_csv("~/Documents/GitHub/jour405_spring26/project/data/md_voter_registration_23_26 - Sheet1.csv") |> clean_names()
+
+```
+
+***CLEANING***
+This data is mostly good, but there are some formatting issues. Namely, the state elections board does not list the specific registration numbers for the same parties across the time span. At some points, it lists the green party. At other points it lists the libertarian party. Sometimes it listed both, sometimes some were collapsed into the "others" column. Because of this, there are n/a values for each of the third-party columns. To remedy this, and because no third party alone makes up too sizable a portion of the electorate, I will create a separate column for the total of third-party voters. This way, there aren't any n/a values that will disrupt my analysis. 
+
+```{r}
+md_voters_registration <- md_voters_registration |> mutate(third_party_total = (total - dem - rep - unaf))
+```
+
 
 
 

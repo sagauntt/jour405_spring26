@@ -1,6 +1,6 @@
 ---
 title: "Identifying Schools with Biggest Differences in Math Test Scores, Part 2"
-author: "YOUR NAME"
+author: "Sam Gauntt"
 ---
 
 ```{r}
@@ -30,8 +30,7 @@ schools |> arrange(desc(`FARMS Pct`)) |> head(10)
 
 Are there any data quality issues like the ones you found in the Pennsylvania data? How does the distribution of FARMS percentages compare between the two counties? Note anything that concerns you or gives you confidence in the data.
 
-ANSWER HERE
-
+Overall the data looks better than the PA data. There is a smooth transition between the variables. There aren't any significant gaps or multiple schools all the way at one end or the other for either variable. The only thing that sticks out to me is the multiple schools at exactly 4% FARMS. But perhaps there is a minimum percentage for schools. 
 
 ### Task 2: Create a Scatterplot and Compare (5 points)
 
@@ -39,7 +38,7 @@ Replace the REPLACE_ME value with the correct variable name to create a scatterp
 
 ```{r}
 schools |>
-  ggplot(aes(x = `REPLACE_ME`, y = `% Met or Exceeded Math Expectations`)) +
+  ggplot(aes(x = `FARMS Pct`, y = `% Met or Exceeded Math Expectations`)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE, color = "red") +
   labs(x = "FARMS Percentage", y = "% Met or Exceeded Math Expectations",
@@ -48,7 +47,7 @@ schools |>
 
 Describe what you see. Then compare this scatterplot specifically to the Pennsylvania one: what differences do you notice in the direction, strength, and spread of the relationship? The two counties share a name and are both suburban — what might explain why they look so different?
 
-ANSWER HERE
+The scatterplots are very different. The PA plot showed a positive relationship between the two, with math scores slightly increasing as FARMS percentage increased. The MoCo plot shows a negative relationship, with scores decreasing as FARMS incresases. It is also a much steeper slope, showing a stronger relationship than the PA plot. Finally, the data points are centered much more closely around the regression line, showing less variance in the data. There could be multiple reasons why the districts are different. Pennsylvania and Maryland have different statewide education policy, which could lead to differences in funding or support. Additionally, Montgomery County, Md. is one of the richest in the nation, while Mongtomery, PA may not have the same resources. 
 
 
 ### Task 3: Linear Regression Model (5 points)
@@ -56,14 +55,15 @@ ANSWER HERE
 Replace the REPLACE_ME value with the correct variable name to run a linear regression model predicting math scores from FARMS percentage.
 
 ```{r}
-model <- lm(`REPLACE_ME` ~ `FARMS Pct`, data = schools)
+model <- lm(`% Met or Exceeded Math Expectations` ~ `FARMS Pct`, data = schools)
 summary(model)
 ```
 
 Report the three key statistics: the p-value, the Adjusted R-squared, and the coefficient for FARMS Pct. Then interpret them together — not separately. What does the combination of these three numbers tell you about the relationship between poverty and math scores in Montgomery County, Md.? Is this model worth using? How does it compare to the Pennsylvania model?
 
-ANSWER HERE
+The p-value is 0.00000000000000022, which less than 0.05, meaning the relationship is statistically significant. The Adjusted R-squared is 0.6734, which means that 67.34% of the variation in the math scores is attributable to FARMS pct. And the coefficient is -0.59511, meaning there is a medium-strong negative relationship between the two variables. 
 
+All together, these variables tell us that while the model doesn't explain everything, it is meaningful, significant and overall worth using. It is far more meaningful than the PA model. 
 
 ### Task 4: Identifying Schools with the Biggest Residuals (6 points)
 
@@ -72,9 +72,9 @@ Replace the REPLACE_ME values with the correct variable names to calculate predi
 ```{r}
 schools <- schools |>
   mutate(
-    predicted = predict(REPLACE_ME),
+    predicted = predict(model),
     residual = `% Met or Exceeded Math Expectations` - predicted,
-    abs_residual = abs(REPLACE_ME)
+    abs_residual = abs(residual)
   ) |>
   arrange(desc(abs_residual))
 
@@ -88,7 +88,16 @@ For each of the two schools, answer:
 - Does anything in that profile help explain why the school is over- or under-performing the model?
 - What would your first reporting question be to the principal of that school?
 
-ANSWER HERE
+
+HIGHEST POSITIVE - Wayside Elementary	(56.45861)
+- The school is located in the 20854 zip code in Potomac Maryland. This is an extremely wealthy zip code, with a median household income of $250,000, more than double the state's overall median. It is also older than the rest of the area, with a median age of 47.7. This area is majority white, at about 58% of the total population. Asian is the next largest demographic, at about 22%. No other racial group breaks 10%. 
+- The community's significant wealth explains why students are overperforming, as they simply have more resources. 
+- This is a wealthy, predominantly white district. What about students who aren't in either of those groups? Are students from less wealthy families receiving the same support as other students? Are students overperforming across the board?
+
+HIGHEST NEGATIVE - Stedwick Elementary (-55.04741)
+- This school is located in the 20886 zip code, which is in the Mongomery Village area. This community is much younger and less wealthy than Wayside's. It has a median household income of $98,542, which is less than both Maryland's and the DMV's. Its median age is 37.9, and it is majority hispanic at about 33% of the total population. White residents and Black residents both make up about 23%, while 14% are Asian. 
+- Similarly, this community's wealth, or lack thereof, explains its underperformance. Though in a rich county, this community has a lower household income than the state's median. 12.8% of residents fall below the poverty line, higher than Maryland's statewide rate of 9.5%. 
+- My first question would be what county and state support look like for this school? It may be in a more impoverished area, but Montgomery County is one of the largest and richest not only in the state, but in the nation. How are county resources being used to support the school and adress its underperformance? 
 
 
 ### Task 5: Evaluate the Model and Write the Pitch (7 points)
@@ -97,4 +106,10 @@ You've now run this analysis on two counties. Return to the school board member'
 
 Write a short story pitch of 4-6 sentences that addresses all of the following: Does the Maryland data support or contradict the claim? How does it compare to what you found in Pennsylvania? What would you ask the school board member if you called them for comment? And what's the most interesting specific finding from your residuals analysis: which school would you want to visit first, and why?
 
-ANSWER HERE
+ANSWER: In Montgomery County, Md., schools with fewer students receiving free and reduced-price meals generally perform better on standardized tests. In Montgomery County, PA, it isn't so clear. 
+
+A local school board member made the claim recently that schools with lower FARMS percentages tend to perform better on math tests. An analysis of data from Montgomery County schools in Maryland back this up. FARMS pct had a correlation coefficient of -0.59511 with math scores, representing a fairly strong, negative relationship. But the PA data was not as clear as Maryland's, with irregularities and errors in its dataset, which ultimately produced a non-statistically significant result. 
+
+But though the Maryland results supported the claim, we can't say that its the sole reason why. FARMS is likely not the only support program for students. Students who receive free or reduced-price meals may receive other benefits or participate in other programs targeted for impoverished or otherwise disadvantaged students.  
+
+I would ask the school board member for their comment on the results of Montgomery County, PA, which did not back up their results. I'd also ask if they thought any other variables could be at play. I would visit Stedwick Elementary first, as I think its more interesting to see why a school in such a wealthy county and school district is under performing.  

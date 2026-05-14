@@ -1,6 +1,6 @@
 ---
 title: "HW10: Significance Testing & Effect Size"
-name: REPLACE WITH YOUR NAME
+name: Sam Gauntt
 ---
 
 You previously calculated the mean, margin of error and confidence interval for monthly car thefts in Prince George's County. Your editor now wants to know: it _looks_ like car thefts are decreasing lately, but is that change real, and how big is it? In this assignment, you'll use significance testing and effect size to answer those questions. Load the tidyverse and the data to get started.
@@ -47,7 +47,7 @@ t_test_periods
 
 **Answer this question:** What is the p-value? Is it less than 0.05? Can we reject the null hypothesis? What does this tell your editor?
 
-The p-value is 2.14e-05. It is far lower than 0.05. We can reject the null hypothesis. This means we can confidently tell the editor that there is a significant difference between the periods. 
+The p-value is 2.14e-05. It is far lower than 0.05. We can reject the null hypothesis. This means we can confidently tell the editor that there is a statistically significant difference between the periods. 
 
 ### Task 3: Visualize the comparison (4 points)
 
@@ -128,11 +128,13 @@ tibble(
   `Cohen's d` = round(cohens_d, 3),
   `Interpretation` = effect_label
 )
+
+(312.2-438.9)/438.9 
 ```
 
 **Answer this question:** How would you describe this effect size? Compare it to the effect sizes we calculated in class (the response times activity had a small effect, the housing prices activity had a medium effect). What does a large effect size mean for the story you'd write about car thefts?
 
-PUT ANSWERS HERE
+In addition to being statistically significant, the effect size is large. We can tell this from the Cohen's d, which is larger than 1, representing a large effect size. 
 
 ### Task 5: Putting it all together (7 points)
 
@@ -140,10 +142,14 @@ You now have three pieces of evidence: the confidence intervals from last week, 
 
 1. In Part 1, your editor asked "just tell me if car thefts are going up or down". Now you have significance testing. Write 2-3 sentences telling your editor the answer, using all three pieces of evidence (CI, p-value, and effect size).
 
-PUT ANSWERS HERE
+Car thefts are going down. We can confirm this through multiple analyses. The difference between the second half of the year and the first half is larger than the margin of error, meaning that natural variation cannot explain the difference. Additionally, the significance test tells us that not only is it statistically siginificant, but its an actually sizable difference.  
 
 2. Write a headline and a 2-3 sentence lede for a story about car thefts in Prince George's County. Unlike the response times story from class (where the effect was small and the headline needed to be cautious), this is a case where the data strongly supports a clear conclusion. Your writing should reflect that — but still note the limitations (correlation vs. causation, what else might explain the decline).
 
-PUT ANSWERS HERE
+HL: Monthly car thefts in Prince George's County drop by nearly 30%
+
+During the second half of the year, Prince George's County saw almost 130 fewer car thefts each month. 
+
+Over the past six months, the county had an average of 312.2 car thefts each month. That's down from the nearly 438.9 thefts it saw during the previous six months, representing a decrease of 28.9%. 
 
 When you are finished, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.

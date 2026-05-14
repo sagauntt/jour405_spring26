@@ -1,5 +1,5 @@
 ---
-title: "Final project data exploration"
+title: "Final project"
 output: html_notebook
 name: "Sam Gauntt"
 ---
@@ -52,6 +52,8 @@ md_voters_registration <- md_voters_registration |> mutate(third_party = (total 
 md_voters_registration <- md_voters_registration |>
   mutate(month = my(month)) 
 ```
+
+
 
 ***INITIAL TESTS/EXPLORATION***
 ```{r}
@@ -113,6 +115,8 @@ md_voters_pct <- md_voters_registration |> mutate(
 
 
 ```
+
+
 
 ***MAIN FINDINGS***
 ```{r}
@@ -233,6 +237,9 @@ ggplot(md_voters_pct, aes(x = month)) +
 #Through the graphs, we can see that both Republicans and Democrats saw spikes in registration ahead of the 2024 eelction, but have been losing voters since. The numnber of third-party and unaffiliated voters, however, have steadily risen. 
 
 ```
+
+
+
 ***FINDINGS***
 ```{r}
 #These dataframes contain my main results. 

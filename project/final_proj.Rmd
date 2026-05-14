@@ -8,21 +8,35 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
 
+***LOAD PACKAGES***
 ```{r}
+#Self explanatory
 library(tidyverse)
 library(janitor)
+library(lubridate)
 ```
+
 ***PROJECT OVERVIEW***
 In this project, I want to analyze monthly voter registration numbers for Maryland residents to determine if there have been any trends or changes in registration patterns over the past three years, but especially since Donald Trump returned to office in 2025. The data spans from January 2023 to April 2026, the latest month for which the elections board lists data.
+
+Going into this project, my hypotheses were: 
+
+Firstly, I believe it will show Republicans leaving the party in Maryland. We've seen national approval ratings drop and the party's under performance in the 2025 elections, so I don't have any reason to believe Maryland will be an outlier. 
+
+Secondly, I think that these voters aren't finding a new home within the Democratic Party. I believe the data will show Democrats receiving a far smaller increase than the Republicans' decrease. As such, we will see a rise in independents. 
+
+Finally, I think we will see that voter registration overall is increasing. 
 
 ***LOADING DATA***
 
 I pulled this data from the Maryland Board of Elections website: https://elections.maryland.gov/voter_registration/stats.html 
 
-Process: I downloaded the monthly report pdf for each month from January 2023 to April 2026. I then uploaded these PDFs into an LLM in batches (I used Google Gemini and cross referenced the results with ChatGPT). I directed the model to pull the totals for each party, as that's what I'm really after. 
+The data: The elections board keeps this data in individual PDFs for each month's registration numbers. Not ideal. But not impossible, either. 
+
+Process: I downloaded the monthly report pdf for each month from January 2023 to April 2026. I then uploaded these PDFs into an LLM in batches (I used Google Gemini and cross referenced the results with ChatGPT). I directed the model to pull the totals for each party, as that's what I'm really after. From there, I created a CSV with each column being total registered voters for each party/voter group and each row being a new month of data. I also went through and manually spot checked from the original PDFs to ensure my numbers were accurate. 
 
 ```{r}
-md_voters_registration <- read_csv("~/Documents/GitHub/jour405_spring26/project/data/md_voter_registration_23_26 - Sheet1.csv") |> clean_names()
+md_voters_registration <- read_csv("https://raw.githubusercontent.com/sagauntt/jour405_spring26/refs/heads/main/project/data/md_voter_registration_23_26%20-%20Sheet1.csv") |> clean_names() 
 
 ```
 
@@ -30,8 +44,229 @@ md_voters_registration <- read_csv("~/Documents/GitHub/jour405_spring26/project/
 This data is mostly good, but there are some formatting issues. Namely, the state elections board does not list the specific registration numbers for the same parties across the time span. At some points, it lists the green party. At other points it lists the libertarian party. Sometimes it listed both, sometimes some were collapsed into the "others" column. Because of this, there are n/a values for each of the third-party columns. To remedy this, and because no third party alone makes up too sizable a portion of the electorate, I will create a separate column for the total of third-party voters. This way, there aren't any n/a values that will disrupt my analysis. 
 
 ```{r}
-md_voters_registration <- md_voters_registration |> mutate(third_party_total = (total - dem - rep - unaf))
+#Here, I am going to create a column for all third-party voter (essentially, anyone who isn't Republican or Democrat or independent. Independent voters are already counted in the "unaf" column)
+
+md_voters_registration <- md_voters_registration |> mutate(third_party = (total - dem - rep - unaf))
+
+#Next, just for ease of use, I am going to convert the months column into date format. 
+md_voters_registration <- md_voters_registration |>
+  mutate(month = my(month)) 
 ```
+
+***INITIAL TESTS/EXPLORATION***
+```{r}
+#First, lets get some basic overall stats. This is just to get a sense of what we're working with.
+head(md_voters_registration) 
+
+dem_overview <- md_voters_registration |>
+  summarize(
+    min = min(dem),
+    max = max(dem),
+    mean_dem = mean(dem),
+    sd_dem = sd(dem)
+  )  
+
+rep_overview <- md_voters_registration |>
+  summarize(
+    min = min(rep),
+    max = max(rep),
+    mean_rep = mean(rep),
+    sd_rep = sd(rep)
+  )  
+
+unaf_overview <- md_voters_registration |>
+  summarize(
+    min = min(unaf),
+    max = max(unaf),
+    mean_unaf = mean(unaf),
+    sd_unaf = sd(unaf)
+  )  
+
+third_party_overview <- md_voters_registration |>
+  summarize(
+    min = min(third_party),
+    max = max(third_party),
+    mean_third_party = mean(third_party),
+    sd_third_party = sd(third_party)
+  )
+
+total_registration_overview <- md_voters_registration |>
+  summarize(
+    min = min(total),
+    max = max(total),
+    mean_third_party = mean(total),
+    sd_third_party = sd(total)
+  )  
+
+#The totals don't always show the big picture, so I want to find out percentage change for each column. I am going to create a new column that shows the percentage change over the previous month. I had to look up the way to compare a value to the previous row, which led me to the "lag" function. 
+
+md_voters_pct <- md_voters_registration |> mutate(
+    dem_pct_change = ((dem - lag(dem)) / lag(dem)) * 100,
+    rep_pct_change = ((rep - lag(rep)) / lag(rep)) * 100,
+    third_party_pct_change = ((third_party - lag(third_party)) / lag(third_party)) * 100,
+    unaf_pct_change = ((unaf - lag(unaf)) / lag(unaf)) * 100,
+    oth_pct_change = ((oth - lag(oth)) / lag(oth)) * 100
+  )
+
+#From this, we can also determine the single biggest changes for each party/voter group between individual months. 
+
+
+
+```
+
+***MAIN FINDINGS***
+```{r}
+#Hypothesis 1
+
+#First, we need to break this into two pieces: Republican voters leaving since Trump took office, and Republican voters leaving before that. By breaking into analysis into two sections (Since 2025, and since 2023), we can tell if this is actually because of recent changes or if it was an already-existing trend. Additionally, since there may be cyclical differences in registration, I am going to compare April 2026 to April 2023 for my overall analysis, so we're doing year-over-year. 
+
+rep_diff <- md_voters_registration |> summarize(
+  election_diff = md_voters_registration$rep[40] - md_voters_registration$rep[25],
+  election_diff_yoy = md_voters_registration$rep[37] - md_voters_registration$rep[25],
+  total_diff = md_voters_registration$rep[40] - md_voters_registration$rep[4]) 
+
+#Let's add percentage change
+
+rep_diff <- md_voters_registration |> summarize(
+  rep_diff_from_election = md_voters_registration$rep[40] - md_voters_registration$rep[25],
+  rep_diff_from_election_pct = ((md_voters_registration$rep[40] - md_voters_registration$rep[25])/md_voters_registration$rep[40]) *100,
+  rep_diff_over_25 = md_voters_registration$rep[37] - md_voters_registration$rep[25],
+  rep_diff_over_25_pct = ((md_voters_registration$rep[37] - md_voters_registration$rep[25])/md_voters_registration$rep[37]) *100,
+  rep_diff_since_23 = md_voters_registration$rep[40] - md_voters_registration$rep[4],
+  rep_diff_since_23_pct = ((md_voters_registration$rep[40] - md_voters_registration$rep[4])/md_voters_registration$rep[40]) *100)
+
+#We can now confirm that Republicans have lost voters over the past year, though it is only between 1-1.5%. We ran a couple different comparisons, and they found that Republicans lost: 29297 voters since January 2025, 28101 voters from January 2025 to January 2026. However, the party is still up 25079 voters since April 2023, an increase of 2.46%. 
+
+
+#Hypothesis 2
+
+#Now, we have the change in Republican voters. But we have to see how this compares with the Democrats. Did they see a similar decrease? An increase?
+
+dem_diff <- md_voters_registration |> summarize(
+  dem_diff_from_election = md_voters_registration$dem[40] - md_voters_registration$dem[25],
+  dem_diff_from_election_pct = ((md_voters_registration$dem[40] - md_voters_registration$dem[25])/md_voters_registration$dem[40]) *100,
+  dem_diff_over_25 = md_voters_registration$dem[37] - md_voters_registration$dem[25],
+  dem_diff_over_25_pct = ((md_voters_registration$dem[37] - md_voters_registration$dem[25])/md_voters_registration$dem[37]) *100,
+  dem_diff_since_23 = md_voters_registration$dem[40] - md_voters_registration$dem[4],
+  dem_diff_since_23_pct = ((md_voters_registration$dem[40] - md_voters_registration$dem[4])/md_voters_registration$dem[40]) *100)
+
+#So, Democrats are doing similar to the Republicans. They've lost 29297 voters since the election, a decrease of 1.33%. But actually they're down overall since April of 2023, having lost 21442 voters. That's about 1% of the party's total. 
+
+
+#Hypothesis 3
+
+#Finally, time to look at total voter registration. 
+
+total_registration <- md_voters_registration |> summarize(
+  diff_from_23 = md_voters_registration$total[40] - md_voters_registration$total[4],
+  diff_from_23_pct = ((md_voters_registration$total[40] - md_voters_registration$total[4])/md_voters_registration$total[40])*100) 
+
+#The third hypothesis is confirmed. The total number of registered voters has increased by 167,050 voters since this time in 2023, representing an increase of about 3.87%
+
+
+#Unaffiliated voters
+
+#So, if Republicans and Democrats are both losing voters. But total registration is increasing. Where are they going? 
+
+indy_registration <- md_voters_registration |> summarize(
+  diff_from_election = md_voters_registration$unaf[40] - md_voters_registration$unaf[25],
+  diff_from_election_pct = ((md_voters_registration$unaf[40] - md_voters_registration$unaf[25])/md_voters_registration$unaf[40])*100)  
+
+#Unaffiliated voters are indeed increasing --- by 6%! This makes up most of the difference. 
+
+```
+
+
+***VISUALIZATIONS***
+```{r}
+#Now, lets create a couple visualizations to better represent these changes. 
+
+#I am creating a plot that shows the the change in registration for both major parties, unaffiliated voters and third-party voters. This spans over the entire period of time, and will give us a good overview of how each has changed. I am also adding a trendline so we can better see the overall trend.
+
+#In addition to these graphs, I will create one showing the change in total voter registration. 
+
+ggplot(md_voters_pct, aes(x = month)) +
+  geom_line(aes(y = unaf), color = "green", size = 1) +
+  geom_smooth(aes(y = unaf), method = "loess", se = FALSE, color = "black", linewidth = 0.5, linetype="dashed") +
+  theme_minimal() +
+  labs(title = "The number of unaffiliated voters in Maryland continues to rise",
+       x = "Month",
+       y = "Registered voters",
+       caption = "Source: State Board of Elections")
+
+ggplot(md_voters_pct, aes(x = month)) +
+  geom_line(aes(y = dem), color = "blue", alpha = 0.7) +
+  geom_smooth(aes(y = dem), method = "loess", se = FALSE, color = "black", linewidth = 0.5, linetype="dashed") +
+  theme_minimal() +
+  labs(title = "After surge during 2024 election, Democratic party steadily losing voters",
+       x = "Month",
+       y = "Registered voters",
+       caption = "Source: State Board of Elections")
+
+ggplot(md_voters_pct, aes(x = month)) +
+  geom_line(aes(y = rep), color = "red", size = 1) +
+  geom_smooth(aes(y = rep), method = "loess", se = FALSE, color = "black", linewidth = 0.5, linetype="dashed") +
+  theme_minimal() +
+  labs(title = "Registered Republican voters are leaving since the 2024 election",
+       x = "Month",
+       y = "Registered voters",
+       caption = "Source: State Board of Elections")
+
+ggplot(md_voters_pct, aes(x = month)) +
+  geom_line(aes(y = third_party), color = "purple", size = 1) + 
+  geom_smooth(aes(y = third_party), method = "loess", se = FALSE, color = "black", linewidth = 0.5, linetype="dashed") +
+  theme_minimal() +
+  labs(title = "Registered third-party voters slowing down, but still increasing",
+       x = "Month",
+       y = "Registered voters",
+       caption = "Source: State Board of Elections")
+
+ggplot(md_voters_pct, aes(x = month)) +
+  geom_line(aes(y = total), color = "brown", size = 1) + 
+  geom_smooth(aes(y = total), method = "loess", se = FALSE, color = "black", linewidth = 0.5, linetype="dashed") +
+  theme_minimal() +
+  labs(title = "Total voter registration has steadily risen in Maryland",
+       x = "Month",
+       y = "Registered voters",
+       caption = "Source: State Board of Elections")
+
+#Through the graphs, we can see that both Republicans and Democrats saw spikes in registration ahead of the 2024 eelction, but have been losing voters since. The numnber of third-party and unaffiliated voters, however, have steadily risen. 
+
+```
+***FINDINGS***
+```{r}
+#These dataframes contain my main results. 
+
+rep_diff 
+
+dem_diff 
+
+indy_registration
+
+total_registration
+
+```
+
+
+***STORY PITCH***
+
+THE STORY: Outside of a surge during the 2024 election, Maryland voters are steadily heading away from major parties. Since Trump returned to office, both Democrats and Republicans are slowly losing voters. 
+
+Democrats saw a drop of about 1.33% since the election, while Republicans were nearly identical at a 1.34% drop. 
+
+SO WHAT: While the changes are not immense, they could reflect a statewide dissatisfaction with the current two major parties. More and more voters registering without affiliating with any party could show their desire for a new option. 
+
+NEXT STEPS: Compare data to other states/nationwide. I'd need to look back at previous presidential elections, such as 2020 and 2016, to determine if this is a similar rate to ones we've seen in the past. Is the trend we're seeing now something routine/normal? Has there been a long term change in the number of unaffiliated voters? 
+
+The state board of elections website maintains records going back to 2000. It also compiles yearly totals in addition to the monthly, which could make it easier to compare trends going back years. It would be important to extend the analysis to get a fuller picture of how voter registration trends have changed. 
+
+SOURCES: 
+-State board of elections for context on the numbers themselves. 
+-State party chairs for perspectives on what they're seeing on the ground in terms of registering voters
+-Political science researchers to give an independent view on what's going on in Maryland and provide context on statewide/national attitutude toward the two major parties that could be influencing voters' registration patterns. 
+
+
+
 
 
 
